@@ -1,0 +1,3 @@
+[console_scripts]
+waage = waage.commandline:main
+

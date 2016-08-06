@@ -1,0 +1,10 @@
+setup.py
+waage/__init__.py
+waage/commandline.py
+waage/main.py
+waage.egg-info/PKG-INFO
+waage.egg-info/SOURCES.txt
+waage.egg-info/dependency_links.txt
+waage.egg-info/entry_points.txt
+waage.egg-info/requires.txt
+waage.egg-info/top_level.txt
