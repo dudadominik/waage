@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% load static from staticfiles %}
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/canvasjs.min.js' %}"></script>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+</head>
+<body>
+
+<div class="container">
+    <div class="jumbotron">
+        <h1>Nils Imker-Messstation</h1>
+        <p>Messstation zum Wiegen <p>
+    </div>
+    {% block content %}
+
+    {% endblock %}
+</div>
+</body>

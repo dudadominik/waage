@@ -2,7 +2,6 @@
 __pycache__
 v
 db.sqlite3
-/static
 .DS_Store
 pw
 *.swp
