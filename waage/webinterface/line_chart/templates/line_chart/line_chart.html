@@ -6,10 +6,35 @@
 
 <head>  
 <script type="text/javascript">
+function StringtoFloat(string_array){
+    var messwerte_array=[];
+    var tmp = '';
+    var check;
+    for (var i=0; i<=string_array.length; i++){
+        check = parseInt(string_array[i]);
+        if (isNaN(check)==false){
+            tmp+=string_array[i];
+        }
+        else if (string_array[i]=='.'){
+            tmp+=string_array[i];
+        }
+        else if (string_array[i]==',' && tmp!=''){
+            messwerte_array.push(parseFloat(tmp));
+            tmp='';
+        }
+        else if (string_array[i]==']'){
+            return messwerte_array;
+        }
+    }
+}
+
+
 window.onload = function () {
 var messwerte = "{{messwerte}}";
+messwerte_array = StringtoFloat(messwerte);       
+    
 var datum = "{{datum}}";
-console.log(typeof(messwerte[4]));
+console.log(datum);
 var chart = new CanvasJS.Chart("chartContainer",
 {
 zoomEnabled: false,
@@ -17,10 +42,15 @@ animationEnabled: true,
 title:{
 text: "messwerte"
 },
+axisX:{
+    interval: "1",
+    intervalType: "hour",
+    valueFormatString: "DD-MMM-YYYY-HH"
+},
 axisY2:{
 valueFormatString:"0.0 kg",
 
-maximum: 3.2,
+maximum: 1.2,
 interval: .2,
 interlacedColor: "#F5F5F5",
 gridColor: "#D7D7D7",      
@@ -43,20 +73,10 @@ type: "line",
 lineThickness:3,
 axisYType:"secondary",
 showInLegend: true,           
-name: "India", 
+name: "Messwert", 
 dataPoints: [
-{ x: new Date(2001, 0), y: parseInt(messwerte[4]) },
-{ x: new Date(2002, 0), y: 0.001 },
-{ x: new Date(2003, 0), y: 0.01},
-{ x: new Date(2004, 0), y: 0.05 },
-{ x: new Date(2005, 0), y: 0.1 },
-{ x: new Date(2006, 0), y: 0.15 },
-{ x: new Date(2007, 0), y: 0.22 },
-{ x: new Date(2008, 0), y: 0.38  },
-{ x: new Date(2009, 0), y: 0.56 },
-{ x: new Date(2010, 0), y: 0.77 },
-{ x: new Date(2011, 0), y: 0.91 },
-{ x: new Date(2012, 0), y: 0.94 }
+{ x: new Date(2002, 06, 03, 22), y: messwerte_array[0]-221 },
+{ x: new Date(2002, 06, 03, 23), y: 0.94 }
 ]
 }
 
