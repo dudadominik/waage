@@ -26,5 +26,5 @@ def write_db(data):
     connection.close()
     
 if __name__=='__main__':
-    create_db()
+ #   create_db()
     write_db(222.22)
