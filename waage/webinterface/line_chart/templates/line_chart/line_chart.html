@@ -1,10 +1,6 @@
 {% extends "line_chart/base.html" %}
 {% block content %}
 
-<!DOCTYPE HTML>
-<html>
-
-<head>  
 <script type="text/javascript">
 function StringtoFloat(string_array){
     var messwerte_array=[];
@@ -45,7 +41,7 @@ text: "messwerte"
 axisX:{
     interval: "1",
     intervalType: "hour",
-    valueFormatString: "DD-MMM-YYYY-HH"
+    valueFormatString: "DD-MMM-YYYY HH-mm"
 },
 axisY2:{
 valueFormatString:"0.0 kg",
@@ -75,8 +71,10 @@ axisYType:"secondary",
 showInLegend: true,           
 name: "Messwert", 
 dataPoints: [
-{ x: new Date(2002, 06, 03, 22), y: messwerte_array[0]-221 },
-{ x: new Date(2002, 06, 03, 23), y: 0.94 }
+{ x: new Date(2002, 06, 03, 22,0,3), y: messwerte_array[0]-222 },
+{ x: new Date(2002, 06, 03, 22,23,3), y: messwerte_array[0]-222 },
+{ x: new Date(2002, 06, 03, 22,44,4), y: messwerte_array[0]-222 },
+{ x: new Date(2002, 06, 03, 23,6,2), y: 0.94 }
 ]
 }
 
@@ -100,9 +98,30 @@ chart.render();
 chart.render();
 }
 </script>
-</head>
-<body>
-<div id="chartContainer" style="height: 300px; width: 100%;">
+
+<script type='text/javascript'>
+$(function(){
+    $('.input-daterange').datepicker({
+        autoclose:true
+    });
+});
+</script>
+
+<div class="row">
+    <div class=col-sm-1>
+    </div>
+    <div class="col-sm-10">
+        <div class="input-daterange input-group" id="datepicker">
+            <input type="text" class="input-sm form-control" name="form" placeholder="From date"/>
+                <span class="input-group-addon">to</span>
+            <input type="text" class="input-sm form-control" name="to" placeholder="To date"/>
+        </div>
+    </div>
+</div>
+
+<br>
+        
+<div id="chartContainer" style="height: 600px; width: 100%;">
 </div>
 </body>
 </html>
