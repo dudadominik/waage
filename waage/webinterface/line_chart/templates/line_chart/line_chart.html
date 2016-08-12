@@ -112,14 +112,43 @@ $(function(){
     </div>
     <div class="col-sm-10">
         <div class="input-daterange input-group" id="datepicker">
-            <input type="text" class="input-sm form-control" name="form" placeholder="From date"/>
+            <input type="text" class="input-sm form-control" name="form" placeholder="From date" id="date_from" />
                 <span class="input-group-addon">to</span>
-            <input type="text" class="input-sm form-control" name="to" placeholder="To date"/>
+            <input type="text" class="input-sm form-control" name="to" placeholder="To date" id="date_to" />
         </div>
     </div>
 </div>
 
 <br>
+
+<script type='text/javascript'>
+$(document).ready(function(){
+    $("input").change(function(){
+        var input_date_from=$("#date_from").val();
+        var input_date_to=$("#date_to").val();
+        $.ajax({
+            url:"/test",
+            type:"POST",
+            dataType:"json",
+            data:{
+                date_to:input_date_from,
+                date_from:input_date_to,
+                csrfmiddlewaretoken:'{{ csrf_token }}'
+            },
+            success: function(json){
+                alert("geschafft");
+            },
+            error:function(){
+                alert("Fehler");
+            }
+        });
+        return false;
+    });
+});
+</script>
+    });
+});
+</script>
         
 <div id="chartContainer" style="height: 600px; width: 100%;">
 </div>
