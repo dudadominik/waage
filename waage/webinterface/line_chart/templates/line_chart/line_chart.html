@@ -30,7 +30,9 @@ var messwerte = "{{messwerte}}";
 messwerte_array = StringtoFloat(messwerte);       
     
 var datum = "{{datum}}";
-console.log(datum);
+var interval="{{interval}}"
+var intervalType="{{intervalType}}"
+
 var chart = new CanvasJS.Chart("chartContainer",
 {
 zoomEnabled: false,
@@ -74,6 +76,8 @@ dataPoints: [
 { x: new Date(2002, 06, 03, 22,0,3), y: messwerte_array[0]-222 },
 { x: new Date(2002, 06, 03, 22,23,3), y: messwerte_array[0]-222 },
 { x: new Date(2002, 06, 03, 22,44,4), y: messwerte_array[0]-222 },
+{ x: new Date(2002, 06, 03, 22,45,4), y: messwerte_array[0]-222 },
+{ x: new Date(2002, 06, 03, 22,46,4), y: messwerte_array[0]-222 },
 { x: new Date(2002, 06, 03, 23,6,2), y: 0.94 }
 ]
 }
