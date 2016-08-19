@@ -23,8 +23,10 @@ def write_db(data):
         ;"""
     cursor.execute(sql_command)
     connection.commit()
+
+def close_db():
     connection.close()
     
 if __name__=='__main__':
- #   create_db()
+  #  create_db()
     write_db(222.22)

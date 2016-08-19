@@ -1,6 +1,6 @@
 import spidev
 import time
-#from write_database import write_db
+from write_database import write_db
 
 def adu(v_ref, bits):
     spi=spidev.SpiDev()
@@ -8,7 +8,7 @@ def adu(v_ref, bits):
     while True:
         antwort = spi.xfer([1,128,0])
         antwort=(antwort[1] * 256 + antwort[2])*(v_ref/(2**bits))
- #       write_db(antwort)
+        write_db(antwort)
         print antwort
         time.sleep(1)
 

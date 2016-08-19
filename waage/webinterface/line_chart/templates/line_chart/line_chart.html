@@ -27,9 +27,11 @@ function StringtoFloat(string_array){
 
 window.onload = function () {
 var messwerte = "{{messwerte}}";
+console.log(messwerte);
 messwerte_array = StringtoFloat(messwerte);       
     
 var datum = "{{datum}}";
+console.log(datum);
 var interval="{{interval}}"
 var intervalType="{{intervalType}}"
 
@@ -41,9 +43,9 @@ title:{
 text: "messwerte"
 },
 axisX:{
-    interval: "1",
-    intervalType: "hour",
-    valueFormatString: "DD-MMM-YYYY HH-mm"
+    interval: "4",
+    intervalType: "month",
+    valueFormatString: "MMM-YYYY"
 },
 axisY2:{
 valueFormatString:"0.0 kg",

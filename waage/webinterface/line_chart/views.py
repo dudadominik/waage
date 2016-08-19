@@ -3,13 +3,14 @@ from django.template import loader
 from django.http import *
 import json as simplejson
 import sqlite3
+import datetime
+import time
+
 
 
 def confirm_ajax(request):
     if (request.POST.has_key('date_to') and request.POST.has_key('date_from')):
         date_from=request.POST['date_from']
-        date_from=date_from.encode('ascii', 'xmlcharrefreplace')
-        print((date_from))
         data_from_day=date_from[3]
         data_from_day+=date_from[4]
         data_from_day=int(data_from_day)
@@ -43,20 +44,51 @@ def confirm_ajax(request):
 def line_chart(request):
     connection = sqlite3.connect("../waage.db")
     cursor = connection.cursor()
-    sql_command = """
-    SELECT Datum from (SELECT * FROM waage order by ID desc limit 10) order by ID asc
+
+    now = datetime.datetime.now()
+    year="%d" %now.year
+    timestamp_of_current_year = datetime.date(int(year),1,1)
+    timestamp_of_current_year= time.mktime(timestamp_of_current_year.timetuple())+3600
+    sql_command ="""
+    select count(Zeitstempel) from waage where  Zeitstempel > (?)  
     ;"""
-    datum = cursor.execute(sql_command)
-    datum = datum.fetchall()
+    var=[timestamp_of_current_year]
+    anzahl_messwerte_im_jahr = cursor.execute(sql_command,var)
+    anzahl_messwerte_im_jahr = anzahl_messwerte_im_jahr.fetchall()
+    anzahl_messwerte_im_jahr = anzahl_messwerte_im_jahr[0][0]
+    id_steper = int(anzahl_messwerte_im_jahr)/10
+
+
     sql_command = """
-    SELECT Gewicht from (SELECT * FROM waage order by ID desc limit 10) order by ID asc
+    SELECT ID from waage order by ID desc
     ;"""
-    messwert = cursor.execute(sql_command)
-    messwert = messwert.fetchall()
+    last_id = cursor.execute(sql_command)
+    last_id = last_id.fetchall()
+    last_id = last_id[0][0]
+
+
+    datum_array=[]    
+    gewicht_array=[]
+    for i in range(10):
+        sql_command = """
+        Select Datum from (select * from waage where Zeitstempel > (?) ) where ID = (?)
+        ;"""
+        var = [timestamp_of_current_year ,int(last_id-(id_steper*i))]
+        datum = cursor.execute(sql_command, var)
+        datum = datum.fetchall()
+        datum_array.append(datum[0][0])
+        sql_command = """
+        Select Gewicht from (select * from waage where  Zeitstempel > (?)) where ID = (?)
+        ;"""
+        var = [timestamp_of_current_year ,int(last_id-(id_steper*i))]
+        gewicht = cursor.execute(sql_command, var)
+        gewicht = gewicht.fetchall()
+        gewicht_array.append(gewicht[0][0])
+        
     connection.commit()
     connection.close()
     t=loader.get_template('line_chart/line_chart.html')
-    c={"messwerte":messwert, "datum":datum}
+    c={"messwerte":gewicht_array, "datum":datum_array}
     return HttpResponse(t.render(c, request))
         #return render(request, "line_chart/line_chart.html",{"messwerte":messwert, "datum":datum})
 
