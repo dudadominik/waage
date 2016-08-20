@@ -2,7 +2,7 @@
 {% block content %}
 
 <script type="text/javascript">
-function StringtoFloat(string_array){
+function StringtoFloat_messwerte(string_array){
     var messwerte_array=[];
     var tmp = '';
     var check;
@@ -22,43 +22,91 @@ function StringtoFloat(string_array){
             return messwerte_array;
         }
     }
-}
+};
+
+function StringtoFloat_datum(string_array){
+    var datum_array=[];
+    var tmp = '';
+    var check;
+    for (var i=0; i<=string_array.length; i++){
+        check = parseInt(string_array[i]);
+        if (isNaN(check)==false){
+            tmp+=string_array[i];
+        }
+        else if ((string_array[i]=='-' || string_array[i]==' ' || string_array[i]==':' || string_array[i]=='&' || string_array[i]==';') && tmp!=''){
+            datum_array.push(parseFloat(tmp));
+            if (string_array[i]==';'){
+                datum_array.pop();
+            }
+            tmp='';
+        }
+        else if (string_array[i]==']'){
+            return datum_array;
+        }
+    }
+};
+
+function min_max(messwerte_array){
+    var min=10000000.0;
+    var max=0.0;
+    for (var i=0; i<=messwerte_array.length; i++){
+        if (messwerte_array[i] > max){
+            max = messwerte_array[i];
+        }
+        else if (messwerte_array[i] < min){
+            min = messwerte_array[i];
+        }
+    }
+    return [min, max];
+};
 
 
 window.onload = function () {
+console.log(new Date(2000,1,3));
 var messwerte = "{{messwerte}}";
-console.log(messwerte);
-messwerte_array = StringtoFloat(messwerte);       
-    
+messwerte_array = StringtoFloat_messwerte(messwerte);       
+var extrema=min_max(messwerte_array);
+var min = extrema[0];
+var max = extrema[1];
+
 var datum = "{{datum}}";
-console.log(datum);
+datum_array=StringtoFloat_datum(datum);
+console.log(datum_array);
+    
 var interval="{{interval}}"
 var intervalType="{{intervalType}}"
 
 var chart = new CanvasJS.Chart("chartContainer",
 {
-zoomEnabled: false,
-animationEnabled: true,
-title:{
-text: "messwerte"
+    zoomEnabled: true,
+    animationEnabled: true,
+    title:{
+        text: "Messwerte vom Jahr " + datum_array[0]
 },
 axisX:{
-    interval: "4",
-    intervalType: "month",
-    valueFormatString: "MMM-YYYY"
+    title: "Time",
+    interval: (24*60*31*2),
+    intervalType: "minute",
+    valueFormatString:"MMM-YYYY"
 },
 axisY2:{
-valueFormatString:"0.0 kg",
-
-maximum: 1.2,
-interval: .2,
-interlacedColor: "#F5F5F5",
-gridColor: "#D7D7D7",      
-tickColor: "#D7D7D7"                                
+    valueFormatString:"0.00000 kg",
+    minimum: 0.999*min,
+    maximum: 1.001*max,
+    interval: (1.001*max-0.999*min)/8,
+    interlacedColor: "#F5F5F5",
+    gridColor: "#D7D7D7",      
+    tickColor: "#D7D7D7"                                
 },
 theme: "theme2",
 toolTip:{
-shared: true
+    shared: true,
+    animationEnable:true,
+    contentFormatter: function(e) {
+        var date = e.entries[0].dataPoint.x;
+        var value = e.entries[0].dataPoint.y;
+        return CanvasJS.formatDate(date, "DD-MMM-YYYY hh:mm") + "<br> Messwert: " + value;
+    }
 },
 legend:{
 verticalAlign: "bottom",
@@ -75,12 +123,10 @@ axisYType:"secondary",
 showInLegend: true,           
 name: "Messwert", 
 dataPoints: [
-{ x: new Date(2002, 06, 03, 22,0,3), y: messwerte_array[0]-222 },
-{ x: new Date(2002, 06, 03, 22,23,3), y: messwerte_array[0]-222 },
-{ x: new Date(2002, 06, 03, 22,44,4), y: messwerte_array[0]-222 },
-{ x: new Date(2002, 06, 03, 22,45,4), y: messwerte_array[0]-222 },
-{ x: new Date(2002, 06, 03, 22,46,4), y: messwerte_array[0]-222 },
-{ x: new Date(2002, 06, 03, 23,6,2), y: 0.94 }
+{ x: new Date(2000,1,3,1,1), y: messwerte_array[0]},
+{ x: new Date(2000,3,4,1,1), y: messwerte_array[1]},
+{ x: new Date(2000,5,5,1,2), y: messwerte_array[2]},
+{ x: new Date(2000,11,7,1,1), y: messwerte_array[3]}
 ]
 }
 

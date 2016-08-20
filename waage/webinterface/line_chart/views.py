@@ -49,6 +49,8 @@ def line_chart(request):
     year="%d" %now.year
     timestamp_of_current_year = datetime.date(int(year),1,1)
     timestamp_of_current_year= time.mktime(timestamp_of_current_year.timetuple())+3600
+    timestamp_of_next_year = datetime.date(int(year)+1,1,1)
+    timestamp_of_next_year= time.mktime(timestamp_of_next_year.timetuple())+3600
     sql_command ="""
     select count(Zeitstempel) from waage where  Zeitstempel > (?)  
     ;"""
@@ -71,16 +73,16 @@ def line_chart(request):
     gewicht_array=[]
     for i in range(10):
         sql_command = """
-        Select Datum from (select * from waage where Zeitstempel > (?) ) where ID = (?)
+        Select Datum from (select * from waage where Zeitstempel between (?) and (?) ) where ID = (?)
         ;"""
-        var = [timestamp_of_current_year ,int(last_id-(id_steper*i))]
+        var = [timestamp_of_current_year, timestamp_of_next_year, int(last_id-(id_steper*i))]
         datum = cursor.execute(sql_command, var)
         datum = datum.fetchall()
         datum_array.append(datum[0][0])
         sql_command = """
-        Select Gewicht from (select * from waage where  Zeitstempel > (?)) where ID = (?)
+        Select Gewicht from (select * from waage where  Zeitstempel between (?) and (?)) where ID = (?)
         ;"""
-        var = [timestamp_of_current_year ,int(last_id-(id_steper*i))]
+        var = [timestamp_of_current_year, timestamp_of_next_year, int(last_id-(id_steper*i))]
         gewicht = cursor.execute(sql_command, var)
         gewicht = gewicht.fetchall()
         gewicht_array.append(gewicht[0][0])
